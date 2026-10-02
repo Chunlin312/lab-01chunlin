@@ -278,7 +278,8 @@ visitors_with_nations %>%
   summarise(
     total_attractions = n(),
     free_attractions = sum(admission == "Free", na.rm = TRUE),
-    prop_attractions = mean(admission == "Free", na.rm = TRUE)
+    prop_attractions = mean(admission == "Free", na.rm = TRUE),
+    perc_attractions = mean(admission == "Free", na.rm = TRUE) * 100
   )
 
 ```
@@ -290,7 +291,10 @@ _Calculate the percentage change in visitor admissions from 2021 to 2022. Of the
 
 ```{r Ex_n}
 # Write your code here
-
-
-
+visitors_with_nations %>%
+  mutate(perc_change = (n_2022 - n_2021)/n_2021 * 100) %>%
+  filter(nation == "Scotland") %>%
+  group_by(admission) %>%
+  summarise(mean_perc_change = mean(perc_change, na.rm = TRUE)) %>%
+  arrange(mean_perc_change)
 ```

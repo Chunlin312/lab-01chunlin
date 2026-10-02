@@ -701,15 +701,16 @@ visitors_with_nations %&gt;%
   summarise(
     total_attractions = n(),
     free_attractions = sum(admission == &quot;Free&quot;, na.rm = TRUE),
-    prop_attractions = mean(admission == &quot;Free&quot;, na.rm = TRUE)
+    prop_attractions = mean(admission == &quot;Free&quot;, na.rm = TRUE),
+    perc_attractions = mean(admission == &quot;Free&quot;, na.rm = TRUE) * 100
   )</code></pre>
-<pre><code>## # A tibble: 4 × 4
-##   nation           total_attractions free_attractions prop_attractions
-##   &lt;chr&gt;                        &lt;int&gt;            &lt;int&gt;            &lt;dbl&gt;
-## 1 England                        240               93            0.388
-## 2 Northern Ireland                 9                1            0.111
-## 3 Scotland                        97               34            0.351
-## 4 Wales                            2                0            0</code></pre>
+<pre><code>## # A tibble: 4 × 5
+##   nation    total_attractions free_attractions prop_attractions perc_attractions
+##   &lt;chr&gt;                 &lt;int&gt;            &lt;int&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1 England                 240               93            0.388             38.8
+## 2 Northern…                 9                1            0.111             11.1
+## 3 Scotland                 97               34            0.351             35.1
+## 4 Wales                     2                0            0                  0</code></pre>
 </div>
 <div id="exercise-o." class="section level3">
 <h3>Exercise o.</h3>
@@ -717,7 +718,19 @@ visitors_with_nations %&gt;%
 to 2022. Of the tourist attractions in Scotland, sort into increasing
 numerical order the types of admission charges based on the mean
 percentage change in visitor numbers.</em></p>
-<pre class="r"><code># Write your code here</code></pre>
+<pre class="r"><code># Write your code here
+visitors_with_nations %&gt;%
+  mutate(perc_change = (n_2022 - n_2021)/n_2021 * 100) %&gt;%
+  filter(nation == &quot;Scotland&quot;) %&gt;%
+  group_by(admission) %&gt;%
+  summarise(mean_perc_change = mean(perc_change, na.rm = TRUE)) %&gt;%
+  arrange(mean_perc_change)</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   admission mean_perc_change
+##   &lt;chr&gt;                &lt;dbl&gt;
+## 1 Charged               4.65
+## 2 Members             138.  
+## 3 Free                303.</code></pre>
 </div>
 </div>
 
